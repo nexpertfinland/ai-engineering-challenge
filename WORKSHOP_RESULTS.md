@@ -71,9 +71,41 @@ Ajoajat sisältävät mallikutsut ja riippuvat myös ajokoneesta ja mallin latau
 Kehitysajo ja ladattavat JSON-tulokset:
 https://github.com/nexpertfinland/ai-engineering-challenge/actions/runs/35865778833
 
-**80 kysymyksen lopputesti on vielä käynnissä.** Kehityspisteitä ei pidä sekoittaa
-lopullisen testin pisteisiin. Arviointiajo:
+### Lopputesti: 80 erillistä kysymystä
+
+Molemmat ajot valmistuivat onnistuneesti. Testattu ratkaisun versio:
+`8c72d6931b0035ec3122c10e96f01342106cfa36`. Myöhemmät muutokset lisäävät raportin
+ja käynnistysohjeet; pisteytettyä hakua tai vastauslogiikkaa ei muutettu.
+
+| Mittari, 80 testikysymystä | Alkuperäinen | Parannettu |
+|---|---:|---:|
+| **Tehtävän pisteet / 100** | **16,01** | **71,71** |
+| Vastausten F1 | 0,1126 | 0,6870 |
+| Täsmälleen oikeat vastaukset | 6/80 (7,5 %) | 49/80 (61,25 %) |
+| Oikea lähdeviite | 28/80 (35 %) | 67/80 (83,75 %) |
+| Suoritusvirheet | 0 | 0 |
+| Tokenit yhteensä | 16 127 | 51 351 |
+| Syötetokenit | 14 203 | 49 981 |
+| Vastaustokenit | 1 924 | 1 370 |
+| Ajoaika | 358,8 s (noin 6 min) | 1 415,2 s (noin 24 min) |
+| Keskimääräinen vastausaika | 4,49 s | 17,69 s |
+
+**Laatupisteet paranivat 55,70 pistettä.** Parannus näkyi myös kysymyksissä,
+joita ei käytetty asetusten valintaan. Tokenkulutus nousi noin 3,2-kertaiseksi
+ja ajoaika oli tässä ympäristössä noin nelinkertainen. Tämä ratkaisu menestyy
+laadun vertailussa; alkuperäinen ratkaisu kuluttaa vähemmän tokeneita.
+
+Lopputestin tulos, lokit ja ladattavat JSON-tiedostot:
 https://github.com/nexpertfinland/ai-engineering-challenge/actions/runs/35866150659
+
+Mittaukset ilman yksittäisiä aineiston kysymyksiä:
+[reports/benchmark-results.json](reports/benchmark-results.json).
+
+Kaikki 15 yksikkötestiä läpäistiin paikallisesti ja jokaisessa neljässä
+GitHub-arviointityössä. Notebookin rakenne, kaikki koodisolujen syntaksit sekä
+aloitus- ja hakusolujen suoritus tarkistettiin. Varsinaiset mallimittaukset ajettiin
+komentoriviltä samalla `RAGPipeline.answer_question`-funktiolla, jota notebook
+käyttää. Notebookiin ei ole lisätty jälkikäteen tekaistuja solutulosteita.
 
 ## Ajaminen omalla koneella
 

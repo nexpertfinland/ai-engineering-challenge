@@ -1,0 +1,124 @@
+{
+  "description": "One measured comparison; full held-out scores use the unchanged official harness.",
+  "measured_date": "2026-09-23",
+  "pipeline_commit": "8c72d6931b0035ec3122c10e96f01342106cfa36",
+  "python": "3.11.16",
+  "provider": "ollama",
+  "model": "llama3.2:3b",
+  "ollama_version": "0.34.3",
+  "model_id_prefix": "a80c4f17acd5",
+  "runtime": "Separate GitHub-hosted Ubuntu CPU runners; timing is machine-dependent.",
+  "corpus_sha256": "84acadde3996684ab48a764136af52b3e961752d01554af8287724860a2c9014",
+  "scorer_sha256": {
+    "eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "eval/harness.py": "6bda6d2c3421a75c834d93d3d6eabe1de79283196b2164b79229f0ab0aba23c3",
+    "eval/metrics.py": "b685f91e04bbb61577bec65bbcc4fe622a341e74b59508e309a11a71a29d80eb"
+  },
+  "configuration": {
+    "max_words": 220,
+    "overlap_words": 40,
+    "bm25_weight": 0.6,
+    "top_k": 3,
+    "temperature": 0,
+    "max_output_tokens": 128,
+    "seed": 42
+  },
+  "development_run": "https://github.com/nexpertfinland/ai-engineering-challenge/actions/runs/35865778833",
+  "held_out_run": "https://github.com/nexpertfinland/ai-engineering-challenge/actions/runs/35866150659",
+  "results": {
+    "dev-baseline": {
+      "n_questions": 40,
+      "f1": 0.1246,
+      "exact_match": 0.075,
+      "citation_hit_rate": 0.3,
+      "dev_score": 15.97,
+      "total_time_sec": 133.42,
+      "total_tokens": 7969,
+      "input_tokens": 7060,
+      "output_tokens": 909,
+      "calls": 40
+    },
+    "dev-improved": {
+      "n_questions": 40,
+      "f1": 0.7373,
+      "exact_match": 0.65,
+      "citation_hit_rate": 0.9,
+      "dev_score": 76.98,
+      "total_time_sec": 488.91,
+      "total_tokens": 26738,
+      "input_tokens": 26110,
+      "output_tokens": 628,
+      "calls": 40
+    },
+    "hidden-baseline": {
+      "n_questions": 80,
+      "exact_match": 0.075,
+      "f1": 0.1126,
+      "citation_hit_rate": 0.35,
+      "score": 16.01,
+      "errors": 0,
+      "total_time_sec": 358.8,
+      "avg_latency_sec": 4.49,
+      "total_tokens": 16127,
+      "input_tokens": 14203,
+      "output_tokens": 1924,
+      "avg_tokens_per_question": 201.6
+    },
+    "hidden-improved": {
+      "n_questions": 80,
+      "exact_match": 0.6125,
+      "f1": 0.687,
+      "citation_hit_rate": 0.8375,
+      "score": 71.71,
+      "errors": 0,
+      "total_time_sec": 1415.2,
+      "avg_latency_sec": 17.69,
+      "total_tokens": 51351,
+      "input_tokens": 49981,
+      "output_tokens": 1370,
+      "avg_tokens_per_question": 641.9
+    }
+  },
+  "retrieval": {
+    "baseline": {
+      "top_1": {
+        "n_questions": 40,
+        "k": 1,
+        "document_hits": 12,
+        "answer_context_hits": 7,
+        "document_recall": 0.3,
+        "answer_context_recall": 0.175,
+        "avg_context_characters": 500.0
+      },
+      "top_3": {
+        "n_questions": 40,
+        "k": 3,
+        "document_hits": 17,
+        "answer_context_hits": 10,
+        "document_recall": 0.425,
+        "answer_context_recall": 0.25,
+        "avg_context_characters": 1500.0
+      }
+    },
+    "improved": {
+      "top_1": {
+        "n_questions": 40,
+        "k": 1,
+        "document_hits": 38,
+        "answer_context_hits": 33,
+        "document_recall": 0.95,
+        "answer_context_recall": 0.825,
+        "avg_context_characters": 760.6
+      },
+      "top_3": {
+        "n_questions": 40,
+        "k": 3,
+        "document_hits": 39,
+        "answer_context_hits": 38,
+        "document_recall": 0.975,
+        "answer_context_recall": 0.95,
+        "avg_context_characters": 2268.3
+      }
+    }
+  }
+}
