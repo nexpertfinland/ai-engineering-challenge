@@ -188,3 +188,6 @@ __marimo__/
 # Dataset
 /data/
 /eval/test_qa.json
+
+# Local benchmark output can contain development questions and model answers.
+/results/

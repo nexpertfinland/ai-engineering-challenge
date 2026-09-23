@@ -8,9 +8,6 @@ on:
         type: choice
         options: [dev, hidden]
         default: dev
-  push:
-    branches: [workshop-solution]
-    paths: ['rag/**', 'scripts/**', 'tests/**', '.github/workflows/benchmark.yml']
 
 permissions:
   contents: read

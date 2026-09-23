@@ -1,5 +1,28 @@
 # AI Engineering Challenge — Local RAG Question Answering
 
+## Valmis workshop-ratkaisu
+
+Tässä repossa on myös toteutettu ratkaisu: kappalerajat säilyttävä tiedonhaku,
+BM25:n ja TF-IDF:n yhdistelmä sekä lyhyet, lähdetekstiin tarkistetut vastaukset.
+Notebookin ohjeet ovat suomeksi. Alkuperäinen vertailuratkaisu on säilytetty
+tiedostossa `rag/baseline.py` ja lukittu arviointikoodi on ennallaan.
+
+**[Muutokset, mitatut tulokset ja ajo-ohjeet](WORKSHOP_RESULTS.md)**
+
+Käynnistys Windowsissa, kun asennus on tehty ja Ollama on käynnissä:
+
+```powershell
+uv run python -m jupyterlab notebooks/challenge.ipynb
+```
+
+Tämä käynnistää JupyterLabin Python-moduulina. PowerShell-ikkuna jää auki
+palvelimen ajaksi. Avaa notebook ja valitse **Run → Run All Cells**.
+Jos virustorjunta näyttää uuden eston, selvitä se ennen jatkamista.
+
+Alla on alkuperäinen tehtävänanto.
+
+---
+
 Answer questions against a local Wikipedia-derived corpus. The starter pipeline already
 runs end-to-end and produces answers — just badly. Improve it, submit early, keep
 iterating. Best score when time's up wins.
