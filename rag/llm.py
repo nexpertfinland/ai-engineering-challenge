@@ -46,7 +46,29 @@ def get_usage() -> dict:
     return dict(_usage)
 
 
-def call_llm(prompt: str, system: str | None = None, model: str | None = None) -> str:
+def ensure_model_ready() -> None:
+    """Fail once, clearly, before an evaluation attempts dozens of requests."""
+    if PROVIDER == "ollama":
+        try:
+            response = requests.get(f"{OLLAMA_HOST}/api/tags", timeout=10)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as exc:
+            raise RuntimeError(
+                f"Ollama is unavailable at {OLLAMA_HOST}. Start Ollama, then retry."
+            ) from exc
+        names = {m.get("name", "") for m in response.json().get("models", [])}
+        expected = DEFAULT_MODEL if ":" in DEFAULT_MODEL else f"{DEFAULT_MODEL}:latest"
+        if expected not in names:
+            raise RuntimeError(f"Model is not installed. Run: ollama pull {DEFAULT_MODEL}")
+    elif not os.getenv({"openai": "OPENAI_API_KEY", "anthropic": "ANTHROPIC_API_KEY"}[PROVIDER]):
+        raise RuntimeError(f"The API key for {PROVIDER} is missing from the environment/.env.")
+
+
+def call_llm(
+    prompt: str, system: str | None = None, model: str | None = None,
+    *, temperature: float | None = None, max_tokens: int | None = None,
+    json_mode: bool = False,
+) -> str:
     """Send a single-turn prompt to the configured LLM and return the text response."""
     model = model or DEFAULT_MODEL
 
@@ -55,11 +77,21 @@ def call_llm(prompt: str, system: str | None = None, model: str | None = None) -
         if system:
             messages.append({"role": "system", "content": system})
         messages.append({"role": "user", "content": prompt})
+        payload = {"model": model, "messages": messages, "stream": False}
+        options = {}
+        if temperature is not None:
+            options.update(temperature=temperature, seed=42)
+        if max_tokens is not None:
+            options["num_predict"] = max_tokens
+        if options:
+            payload["options"] = options
+        if json_mode:
+            payload["format"] = "json"
         try:
             resp = requests.post(
                 f"{OLLAMA_HOST}/api/chat",
-                json={"model": model, "messages": messages, "stream": False},
-                timeout=120,
+                json=payload,
+                timeout=float(os.getenv("LLM_TIMEOUT_SECONDS", "180")),
             )
             resp.raise_for_status()
         except requests.exceptions.ConnectionError as exc:
@@ -79,7 +111,14 @@ def call_llm(prompt: str, system: str | None = None, model: str | None = None) -
         if system:
             messages.append({"role": "system", "content": system})
         messages.append({"role": "user", "content": prompt})
-        resp = client.chat.completions.create(model=model, messages=messages)
+        options = {}
+        if temperature is not None:
+            options["temperature"] = temperature
+        if max_tokens is not None:
+            options["max_completion_tokens"] = max_tokens
+        if json_mode:
+            options["response_format"] = {"type": "json_object"}
+        resp = client.chat.completions.create(model=model, messages=messages, **options)
         _record_usage(resp.usage.prompt_tokens, resp.usage.completion_tokens)
         return resp.choices[0].message.content
 
@@ -89,9 +128,10 @@ def call_llm(prompt: str, system: str | None = None, model: str | None = None) -
         client = anthropic.Anthropic()
         resp = client.messages.create(
             model=model,
-            max_tokens=512,
+            max_tokens=max_tokens or 512,
             system=system or "",
             messages=[{"role": "user", "content": prompt}],
+            **({"temperature": temperature} if temperature is not None else {}),
         )
         _record_usage(resp.usage.input_tokens, resp.usage.output_tokens)
         return resp.content[0].text
